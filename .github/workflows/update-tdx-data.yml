@@ -1,1 +1,48 @@
+name: Update TDX Daily Data
 
+on:
+  schedule:
+    # 北京时间 18:00 = UTC 10:00；每日盘后自动更新一次。
+    - cron: "0 10 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "是否强制绕过 18:00 保护，手动测试时可选 true"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-tdx-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch latest real data
+        env:
+          FORCE_UPDATE: ${{ github.event.inputs.force == 'true' && '1' || '0' }}
+        run: python update_tdx_daily.py
+
+      - name: Commit updated data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "data: update real TDX daily data"
+          file_pattern: "data/**/*.json"
