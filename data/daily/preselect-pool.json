@@ -1,0 +1,15 @@
+{
+  "updatedAt": "",
+  "rule": "",
+  "holdingDays": [
+    1,
+    3,
+    5,
+    10
+  ],
+  "entries": [],
+  "summary": {
+    "total": 0,
+    "milestones": {}
+  }
+}
