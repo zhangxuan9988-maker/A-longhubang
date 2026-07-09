@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Fetch real TDX 龙虎榜 data and real unadjusted daily close prices.
+"""Fetch real TDX 龙虎榜 data and real forward-adjusted daily close prices.
 
 Rules:
 - No mock data, no estimated prices, no back-calculated close prices.
 - 龙虎榜 rows come from 通达信 TDX endpoint.
-- Closing prices come from 东方财富日K线, fqt=0（不复权真实收盘价）.
+- Closing prices come from 东方财富日K线, fqt=1（前复权收盘价）.
 - If a price cannot be confirmed for the exact 龙虎榜 date, it is written as null
   with price_confirmed=false, and the front end must show it as 未确认.
 """
@@ -184,7 +184,7 @@ def price_unconfirmed(message: str, source: str = "eastmoney_daily_kline") -> di
         "change_amount": None,
         "turnover_pct": None,
         "price_source": source,
-        "price_basis": "unadjusted_daily_close_fqt0",
+        "price_basis": "forward_adjusted_daily_close_fqt1",
         "price_confirmed": False,
         "price_error": message[:180],
     }
@@ -208,7 +208,7 @@ def clean_price(price: dict[str, Any], expected_date: str, source: str) -> dict[
         "change_amount": maybe_number(price.get("change_amount")),
         "turnover_pct": maybe_number(price.get("turnover_pct")),
         "price_source": source,
-        "price_basis": "unadjusted_daily_close_fqt0",
+        "price_basis": "forward_adjusted_daily_close_fqt1",
         "price_confirmed": True,
     }
 
@@ -263,7 +263,7 @@ def fetch_daily_kline(code: str, date_value: str, market: Any = "") -> dict[str,
     params = {
         "secid": secid_for_stock(code, market),
         "klt": "101",
-        "fqt": "0",  # 0=不复权；真实收盘价不能用前复权/后复权
+        "fqt": "1",  # 1=前复权；统一使用前复权收盘价计算收益率
         "beg": day,
         "end": day,
         "lmt": "1",
@@ -292,27 +292,30 @@ def fetch_daily_kline(code: str, date_value: str, market: Any = "") -> dict[str,
             "turnover_pct": parts[10],
         },
         date_value,
-        "eastmoney_daily_kline_fqt0",
+        "eastmoney_daily_kline_fqt1",
     )
 
 
 def fetch_closing_prices(raw_rows: list[dict[str, Any]], date_value: str) -> dict[str, dict[str, Any]]:
+    """Fetch only 东方财富前复权日K（fqt=1）for the exact 龙虎榜 date.
+
+    Do not use the batch quote endpoint here: real-time quote fields are not
+    forward-adjusted and would mix price bases with qfq returns.
+    """
     grouped_market: dict[str, Any] = {}
     for row in raw_rows:
         code = str(row.get("gpdm") or "").strip()
         if code and code not in grouped_market:
             grouped_market[code] = row.get("sc")
 
-    prices = fetch_batch_quotes(raw_rows, date_value)
+    prices: dict[str, dict[str, Any]] = {}
     for code, market in sorted(grouped_market.items()):
-        if code in prices:
-            continue
         try:
             price = fetch_daily_kline(code, date_value, market)
         except Exception as exc:
             price = price_unconfirmed(str(exc))
         if price is None:
-            price = price_unconfirmed("No exact unadjusted daily K-line for the LHB date.")
+            price = price_unconfirmed("No exact forward-adjusted daily K-line for the LHB date.")
         prices[code] = price
         time.sleep(0.25)
     return prices
@@ -389,10 +392,10 @@ def summarize(rows: list[dict[str, Any]], date_value: str) -> dict[str, Any]:
         "topStocksByNetBuy": sorted(stocks.values(), key=lambda item: item["jmr"], reverse=True)[:20],
         "topStocksByNetSell": sorted(stocks.values(), key=lambda item: item["jmr"])[:20],
         "pricePolicy": {
-            "rule": "只写入与龙虎榜日期一致的东方财富不复权日K真实收盘价；不估算、不倒推、不虚标。",
+            "rule": "只写入与龙虎榜日期一致的东方财富前复权日K收盘价；不估算、不倒推、不虚标。",
             "lhbSource": "tdx_cfg_fx_yzlhb",
             "priceSource": "eastmoney_daily_kline",
-            "priceBasis": "fqt=0 不复权真实收盘价",
+            "priceBasis": "fqt=1 前复权收盘价",
             "confirmedRows": confirmed,
             "unconfirmedRows": len(rows) - confirmed,
         },
@@ -529,7 +532,7 @@ def fetch_kline_series(code: str, start_date: str, end_date: str) -> list[dict[s
     params = {
         "secid": secid_for_stock(code),
         "klt": "101",
-        "fqt": "0",
+        "fqt": "1",
         "beg": start_date.replace("-", ""),
         "end": end_date.replace("-", ""),
         "fields1": "f1,f2,f3,f4,f5,f6",
@@ -608,7 +611,7 @@ def update_preselect_pool(rows: list[dict[str, Any]], date_value: str) -> dict[s
         time.sleep(0.10)
     pool = {
         "updatedAt": now_cn().isoformat(timespec="seconds"),
-        "rule": "只从机构专用、深股通专用、沪股通专用相关记录中，按当日净买入排序生成稳健型预选池；收益率全部用不复权真实日K收盘价计算。",
+        "rule": "只从机构专用、深股通专用、沪股通专用相关记录中，按当日净买入排序生成稳健型预选池；收益率全部用前复权日K收盘价计算。",
         "holdingDays": list(HOLDING_DAYS),
         "entries": entries,
         "summary": summarize_preselect(entries),
