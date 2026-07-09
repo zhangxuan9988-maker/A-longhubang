@@ -94,7 +94,7 @@ function renderQuality(summary) {
   const confirmed = policy.confirmedRows ?? 0;
   const total = summary.rowCount ?? 0;
   const missing = policy.unconfirmedRows ?? 0;
-  const strict = "通达信龙虎榜 + 东方财富不复权日K；不估算、不倒推、不虚标。";
+  const strict = "通达信龙虎榜 + 东方财富前复权日K；不估算、不倒推、不虚标。";
   document.querySelector("#qualityNotice").innerHTML = missing > 0
     ? `数据规则：${strict}<br>当前收盘价确认 ${confirmed}/${total}，未确认 ${missing} 条会显示为“收盘价未确认”。`
     : `数据规则：${strict}<br>当前收盘价已全部确认：${confirmed}/${total}。`;
