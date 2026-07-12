@@ -1,7 +1,7 @@
 {
   "summary": {
     "date": "2026-07-10",
-    "updatedAt": "2026-07-11T22:35:30+08:00",
+    "updatedAt": "2026-07-12T22:40:23+08:00",
     "rowCount": 354,
     "activeYzCount": 31,
     "activeYybCount": 56,
@@ -1461,13 +1461,13 @@
       "lhbSource": "tdx_cfg_fx_yzlhb",
       "priceSource": "eastmoney_daily_kline",
       "priceBasis": "fqt=1 前复权收盘价",
-      "confirmedRows": 24,
-      "unconfirmedRows": 330
+      "confirmedRows": 20,
+      "unconfirmedRows": 334
     },
     "preselectPool": {
-      "entryCount": 4,
+      "entryCount": 3,
       "summary": {
-        "total": 4,
+        "total": 3,
         "milestones": {
           "T+1": {
             "confirmedCount": 0,
@@ -5513,20 +5513,21 @@
       "mcje": 86556136.0,
       "jmr": -27518760.0,
       "price": {
-        "price_date": "2026-07-10",
-        "open": 4.58,
-        "close": 4.95,
-        "high": 5.19,
-        "low": 4.45,
-        "volume": 2745726.0,
-        "amount": 1344186898.18,
-        "amplitude_pct": 15.64,
-        "pct_change": 4.65,
-        "change_amount": 0.22,
-        "turnover_pct": 21.17,
-        "price_source": "eastmoney_daily_kline_fqt1",
+        "price_date": "",
+        "open": null,
+        "close": null,
+        "high": null,
+        "low": null,
+        "volume": null,
+        "amount": null,
+        "amplitude_pct": null,
+        "pct_change": null,
+        "change_amount": null,
+        "turnover_pct": null,
+        "price_source": "eastmoney_daily_kline",
         "price_basis": "forward_adjusted_daily_close_fqt1",
-        "price_confirmed": true
+        "price_confirmed": false,
+        "price_error": "Remote end closed connection without response"
       }
     },
     {
@@ -7221,20 +7222,21 @@
       "mcje": 49435398.0,
       "jmr": 34012027.0,
       "price": {
-        "price_date": "2026-07-10",
-        "open": 4.58,
-        "close": 4.95,
-        "high": 5.19,
-        "low": 4.45,
-        "volume": 2745726.0,
-        "amount": 1344186898.18,
-        "amplitude_pct": 15.64,
-        "pct_change": 4.65,
-        "change_amount": 0.22,
-        "turnover_pct": 21.17,
-        "price_source": "eastmoney_daily_kline_fqt1",
+        "price_date": "",
+        "open": null,
+        "close": null,
+        "high": null,
+        "low": null,
+        "volume": null,
+        "amount": null,
+        "amplitude_pct": null,
+        "pct_change": null,
+        "change_amount": null,
+        "turnover_pct": null,
+        "price_source": "eastmoney_daily_kline",
         "price_basis": "forward_adjusted_daily_close_fqt1",
-        "price_confirmed": true
+        "price_confirmed": false,
+        "price_error": "Remote end closed connection without response"
       }
     },
     {
@@ -10602,20 +10604,21 @@
       "mcje": 15897342.0,
       "jmr": -7276241.0,
       "price": {
-        "price_date": "2026-07-10",
-        "open": 4.58,
-        "close": 4.95,
-        "high": 5.19,
-        "low": 4.45,
-        "volume": 2745726.0,
-        "amount": 1344186898.18,
-        "amplitude_pct": 15.64,
-        "pct_change": 4.65,
-        "change_amount": 0.22,
-        "turnover_pct": 21.17,
-        "price_source": "eastmoney_daily_kline_fqt1",
+        "price_date": "",
+        "open": null,
+        "close": null,
+        "high": null,
+        "low": null,
+        "volume": null,
+        "amount": null,
+        "amplitude_pct": null,
+        "pct_change": null,
+        "change_amount": null,
+        "turnover_pct": null,
+        "price_source": "eastmoney_daily_kline",
         "price_basis": "forward_adjusted_daily_close_fqt1",
-        "price_confirmed": true
+        "price_confirmed": false,
+        "price_error": "Remote end closed connection without response"
       }
     },
     {
@@ -11264,20 +11267,21 @@
       "mcje": 17524241.0,
       "jmr": -10066458.0,
       "price": {
-        "price_date": "2026-07-10",
-        "open": 4.58,
-        "close": 4.95,
-        "high": 5.19,
-        "low": 4.45,
-        "volume": 2745726.0,
-        "amount": 1344186898.18,
-        "amplitude_pct": 15.64,
-        "pct_change": 4.65,
-        "change_amount": 0.22,
-        "turnover_pct": 21.17,
-        "price_source": "eastmoney_daily_kline_fqt1",
+        "price_date": "",
+        "open": null,
+        "close": null,
+        "high": null,
+        "low": null,
+        "volume": null,
+        "amount": null,
+        "amplitude_pct": null,
+        "pct_change": null,
+        "change_amount": null,
+        "turnover_pct": null,
+        "price_source": "eastmoney_daily_kline",
         "price_basis": "forward_adjusted_daily_close_fqt1",
-        "price_confirmed": true
+        "price_confirmed": false,
+        "price_error": "Remote end closed connection without response"
       }
     },
     {
